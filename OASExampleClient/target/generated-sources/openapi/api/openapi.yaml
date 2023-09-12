@@ -1,0 +1,72 @@
+openapi: 3.0.3
+info:
+  description: Employee API Spec
+  title: Employee - OpenAPI 3.0
+  version: 1.0.0
+servers:
+- url: api/v1
+paths:
+  /employee:
+    get:
+      description: Get all employees
+      operationId: getEmployees
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Employee'
+                type: array
+          description: successful operation
+        "400":
+          description: Invalid request
+      summary: Get all employees
+      tags:
+      - employee
+      x-accepts: application/json
+    post:
+      description: Add a new employee
+      operationId: addEmployee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        description: Create a new employee
+        required: true
+      responses:
+        "200":
+          content:
+            application/text:
+              schema:
+                type: string
+          description: Created
+        "400":
+          description: Invalid request
+      summary: Add a new employee
+      tags:
+      - employee
+      x-contentType: application/json
+      x-accepts: application/text
+components:
+  schemas:
+    Employee:
+      example:
+        name: John
+        id: 10
+        age: 25
+      properties:
+        id:
+          example: 10
+          format: int64
+          type: integer
+        name:
+          example: John
+          type: string
+        age:
+          example: 25
+          format: int
+          type: integer
+      type: object
+
