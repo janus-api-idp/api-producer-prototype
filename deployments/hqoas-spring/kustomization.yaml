@@ -1,0 +1,18 @@
+bases:
+  - ./common
+namespace: hqoas-jdbc-demo
+namePrefix: hqoas-spring-
+nameSuffix: "-v1"
+commonLabels:
+  app: hqoas-jdbc-demo
+  version: v1
+commonAnnotations:
+  deployedBy: "argocd"
+  chain: "tekton-pipeline"
+  environment: "hqoas-spring"
+patchesStrategicMerge:
+- mem-sizing.yaml
+images:
+- name: hqoas-jdbc-demo
+  newName: image-registry.openshift-image-registry.svc:5000/hqoas-jdbc-demo/hqoas-jdbc-demo
+  newTag: latest
