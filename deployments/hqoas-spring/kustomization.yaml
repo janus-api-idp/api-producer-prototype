@@ -14,5 +14,5 @@ patchesStrategicMerge:
 - mem-sizing.yaml
 images:
 - name: hqoas-jdbc-demo
-  newName: image-registry.openshift-image-registry.svc:5000/hqoas-jdbc-demo/hqoas-jdbc-demo
+  newName: default-route-openshift-image-registry.apps.cluster-vxdqr.vxdqr.sandbox1122.opentlc.com/hqoas-jdbc-demo/hqoas-jdbc-demo
   newTag: latest

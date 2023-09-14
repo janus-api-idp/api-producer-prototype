@@ -17,7 +17,7 @@ spec:
       default: "src/main/docker"
     - name: image-name
       type: string
-      default: image-registry.openshift-image-registry.svc:5000/hqoas-jdbc-demo/hqoas-jdbc-demo
+      default: default-route-openshift-image-registry.apps.cluster-vxdqr.vxdqr.sandbox1122.opentlc.com/hqoas-jdbc-demo/hqoas-jdbc-demo
 
   steps:
     - name: buildah-build
