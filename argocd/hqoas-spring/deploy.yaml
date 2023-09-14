@@ -1,0 +1,19 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hqoas-spring-app
+  namespace: openshift-gitops
+spec:
+  project: hqoas-spring-app
+  source:
+    repoURL: https://github.com/57800-hydroquebec/api-producer-prototype.git
+    targetRevision: master
+    path: deployments/hqoas-spring
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-gitops
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
