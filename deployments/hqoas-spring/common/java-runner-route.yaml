@@ -6,7 +6,7 @@ metadata:
     app: java-runner
   name: java-runner-route
 spec:
-  host: my-component.apps.example.com
+  host: hqoas-spring-java-runner-service-v1.hqoas-jdbc-demo.svc.cluster.local
   path: /api/v1
   to:
     name: java-runner-service
