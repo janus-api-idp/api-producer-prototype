@@ -14,5 +14,5 @@ patchesStrategicMerge:
 - mem-sizing.yaml
 images:
 - name: hqoas-jdbc-demo
-  newName: image-registry.openshift-image-registry.svc.cluster.local/hqoas-jdbc-demo/hqoas-jdbc-demo
+  newName: image-registry.openshift-image-registry.svc:5000/hqoas-jdbc-demo/hqoas-jdbc-demo
   newTag: latest
