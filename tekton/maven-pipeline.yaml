@@ -14,6 +14,7 @@ spec:
     - name: git-url
       type: string
       description: "Upstream Source Repository Url"
+      default: https://github.com/57800-hydroquebec/api-producer-prototype.git
     - name: git-revision
       type: string
       description: "Upstream source code revision to pull"
