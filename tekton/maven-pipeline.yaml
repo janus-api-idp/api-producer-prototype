@@ -21,6 +21,7 @@ spec:
     - name: image-name
       type: string
       description: "Target OCI image name"
+      default: image-registry.openshift-image-registry.svc:5000/hqoas-jdbc-demo/hqoas-jdbc-demo
 
   tasks:
   - name: clone
