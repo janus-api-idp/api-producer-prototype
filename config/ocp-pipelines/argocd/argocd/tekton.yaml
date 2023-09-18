@@ -1,0 +1,19 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tekton-operator
+  namespace: openshift-gitops
+spec:
+  project: ocp-pipelines
+  source:
+    repoURL: https://github.com/57800-hydroquebec/api-producer-prototype.git
+    targetRevision: master
+    path: config/ocp-pipelines/operator
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-gitops
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
