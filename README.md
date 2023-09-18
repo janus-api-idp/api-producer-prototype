@@ -16,3 +16,32 @@ You can view the api documentation in swagger-ui by pointing to
 http://localhost:8080/
 
 Change default port value in application.properties
+
+oc apply -k config/ocp-gitops/operator
+
+Once ArgoCD is up & running, let's install the remaining dependencies
+
+$ oc apply -k config/ocp-pipelines/argocd
+
+Create a new project:
+$ oc new-project fuse-jdbc-demo
+
+Install tekton pipeline components:
+oc apply -k tekton/
+
+Run the pipeline via the Web UI 
+
+Deploy ArgoCD applications:
+oc apply -k argocd/hqoas-spring
+
+And wait for the deployment to show
+
+oc get deployment -n hqoas-jdbc-demo
+
+Expose the service to the public 
+oc expose svc hqoas-spring-java-runner-service-v1
+
+You can then discover the url by typing
+oc get routes
+
+Copy the host field and go check that out
