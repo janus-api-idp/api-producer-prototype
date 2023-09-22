@@ -27,7 +27,7 @@ $ oc apply -k config/ocp-pipelines/argocd
 
 Create a new project:
  ~~~
-$ oc new-project fuse-jdbc-demo
+$ oc new-project hqoas-jdbc-demo
  ~~~
 
 Install tekton pipeline components:
