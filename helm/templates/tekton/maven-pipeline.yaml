@@ -1,0 +1,83 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hqoas-spring-maven-pipeline
+spec:
+  workspaces:
+  - name: maven-repo
+
+  params:
+    - name: dockerfilePath
+      type: string
+      description: Path containing the Dockerfile for the final image
+      default: "src/main/docker"
+    - name: git-url
+      type: string
+      description: "Upstream Source Repository Url"
+      default: https://github.com/57800-hydroquebec/api-producer-prototype.git
+    - name: git-revision
+      type: string
+      description: "Upstream source code revision to pull"
+    - name: image-name
+      type: string
+      description: "Target OCI image name"
+      default: image-registry.openshift-image-registry.svc:5000/hqoas-jdbc-demo/hqoas-jdbc-demo
+
+  tasks:
+  - name: clone
+    taskRef:
+      kind: ClusterTask
+      name: git-clone
+    params:
+      - name: url
+        value: $(params.git-url)
+      - name: revision
+        value: $(params.git-revision)
+    workspaces:
+    - name: output
+      workspace: maven-repo
+
+  - name: build
+    taskRef:
+      name: maven-task
+    runAfter: ["clone"]
+    params:
+    - name: GOALS
+      value: ["-Dmaven.repo.local=$(workspaces.maven-repo.path)", "-DskipTests=true", "compile"]
+    workspaces:
+    - name: maven-repo
+      workspace: maven-repo
+
+  - name: package
+    taskRef:
+      name: maven-task
+    runAfter: ["build"]
+    params:
+    - name: GOALS
+      value: ["-Dmaven.repo.local=$(workspaces.maven-repo.path)", "-DskipTests=true", "package"]
+    workspaces:
+    - name: maven-repo
+      workspace: maven-repo
+
+  - name: build-container-image
+    taskRef:
+      name: build-task
+    runAfter: ["package"]
+    params:
+      - name: TLS_VERIFY
+        value: "false"
+      - name: dockerfilePath
+        value: "src/main/docker"
+      - name: image-name
+        value: $(params.image-name)
+    workspaces:
+    - name: maven-repo
+      workspace: maven-repo
+
+  finally:
+  - name: clean-workspace
+    taskRef:
+      name: cleanup-workspace
+    workspaces:
+    - name: maven-repo
+      workspace: maven-repo
