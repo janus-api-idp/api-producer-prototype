@@ -1,6 +1,0 @@
-resources:
-- serviceaccount.yaml
-- java-runner-deployment.yaml
-- java-runner-service.yaml
-- servicemonitor.yaml
-
