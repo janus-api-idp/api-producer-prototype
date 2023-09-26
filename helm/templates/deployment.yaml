@@ -14,22 +14,6 @@ spec:
       labels:
         app: {{ .Release.Name }}-java-app
     spec:
-      initContainers:
-        - name: wait-for-tekton-taskrun
-          image: alpine:latest
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              # Wait for the Tekton TaskRun to complete successfully
-              while [[ "$(kubectl get taskrun hqoas-spring-build-taskrun -n tekton-tasks -o jsonpath='{.status.conditions[?(@.type=="Succeeded")].status}')" != "True" ]]; do
-                sleep 5
-              done
-          securityContext:
-            runAsUser: 0
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "50m"
       containers:
         - name: {{ .Release.Name }}-java-app-container
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

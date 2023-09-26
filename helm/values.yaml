@@ -11,8 +11,8 @@ persistentVolumeClaim:
 
 # Define the Docker image repository and tag for your Java application.
 image:
-  repository: image-registry.openshift-image-registry.svc:5000/hqoas-jdbc-demo
-  tag: hqoas-jdbc-demo
+  repository: image-registry.openshift-image-registry.svc:5000/hqoas-jdbc-demo/hqoas-jdbc-demo
+  tag: latest
 
 # Define the container port your Java application listens on.
 containerPort: 8080
