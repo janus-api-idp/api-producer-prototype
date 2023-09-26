@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: build-task
+  namespace: tekton-tasks
 spec:
   workspaces:
     - name: maven-repo

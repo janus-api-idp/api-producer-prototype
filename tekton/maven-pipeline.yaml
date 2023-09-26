@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: hqoas-spring-maven-pipeline
+  namespace: tekton-tasks
 spec:
   workspaces:
   - name: maven-repo
@@ -26,7 +27,6 @@ spec:
   tasks:
   - name: clone
     taskRef:
-      kind: ClusterTask
       name: git-clone
     params:
       - name: url
