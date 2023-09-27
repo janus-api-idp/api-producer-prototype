@@ -1,22 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-java-app
+  name: {{ .Release.Name }}
   labels:
-    app: {{ .Release.Name }}-java-app
+    app: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-java-app
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-java-app
+        app: {{ .Release.Name }}
     spec:
       containers:
-        - name: {{ .Release.Name }}-java-app-container
+        - name: {{ .Release.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: {{ .Values.containerPort }}

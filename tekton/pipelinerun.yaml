@@ -6,10 +6,12 @@ metadata:
 spec:
   pipelineRef:
     name: hqoas-spring-maven-pipeline
-  podTemplate:
-    securityContext:
-      fsGroup: 65532
   workspaces:
+  - name: maven-settings
+    emptyDir: {}
+  - name: quay-credentials
+    secret:
+      secretName: quay-credentials
   - name: maven-repo
     volumeClaimTemplate:
       spec:
@@ -21,3 +23,9 @@ spec:
   params:
   - name: git-revision
     value: add-helm
+  - name: git-url
+    value: https://github.com/janus-api-idp/api-producer-prototype.git
+  - name: image-name
+    value: quay.io/maximilianb/hqoas-spring-demo:cluster
+  - name: dockerfilePath
+    value: ./src/main/docker/Dockerfile
