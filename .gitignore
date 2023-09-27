@@ -2,5 +2,5 @@
 /*.classpath
 /*.project
 /*.settings
-tekton/quay-credentials.yml
-helm/charts
+.tekton/quay-credentials.yml
+.helm/charts
