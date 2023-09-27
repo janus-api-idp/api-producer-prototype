@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: hqoas-spring-maven-pipeline-run-
+  namespace: tekton-tasks
+spec:
+  pipelineRef:
+    name: hqoas-spring-maven-pipeline
+  workspaces:
+  - name: maven-settings
+    emptyDir: {}
+  - name: quay-credentials
+    secret:
+      secretName: quay-credentials
+  - name: maven-repo
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  params:
+  - name: git-revision
+    value: add-helm
+  - name: git-url
+    value: https://github.com/janus-api-idp/api-producer-prototype.git
+  - name: image-name
+    value: quay.io/maximilianb/hqoas-spring-demo:cluster
+  - name: dockerfilePath
+    value: ./src/main/docker/Dockerfile

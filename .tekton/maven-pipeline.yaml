@@ -2,32 +2,32 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: hqoas-spring-maven-pipeline
+  namespace: tekton-tasks
 spec:
   workspaces:
   - name: maven-repo
+  - name: quay-credentials
+  - name: maven-settings
 
   params:
     - name: dockerfilePath
       type: string
       description: Path containing the Dockerfile for the final image
-      default: "src/main/docker"
     - name: git-url
       type: string
       description: "Upstream Source Repository Url"
-      default: https://github.com/57800-hydroquebec/api-producer-prototype.git
     - name: git-revision
       type: string
       description: "Upstream source code revision to pull"
     - name: image-name
       type: string
       description: "Target OCI image name"
-      default: image-registry.openshift-image-registry.svc:5000/hqoas-jdbc-demo/hqoas-jdbc-demo
 
   tasks:
   - name: clone
     taskRef:
-      kind: ClusterTask
       name: git-clone
+      kind: ClusterTask
     params:
       - name: url
         value: $(params.git-url)
@@ -39,45 +39,44 @@ spec:
 
   - name: build
     taskRef:
-      name: maven-task
+      name: maven
+      kind: ClusterTask
     runAfter: ["clone"]
     params:
     - name: GOALS
-      value: ["-Dmaven.repo.local=$(workspaces.maven-repo.path)", "-DskipTests=true", "compile"]
+      value: ["compile"]
     workspaces:
-    - name: maven-repo
+    - name: source
       workspace: maven-repo
+    - name: maven-settings
+      workspace: maven-settings
 
   - name: package
     taskRef:
-      name: maven-task
+      name: maven
+      kind: ClusterTask
     runAfter: ["build"]
     params:
     - name: GOALS
-      value: ["-Dmaven.repo.local=$(workspaces.maven-repo.path)", "-DskipTests=true", "package"]
+      value: ["package"]
     workspaces:
-    - name: maven-repo
+    - name: source
       workspace: maven-repo
+    - name: maven-settings
+      workspace: maven-settings
 
   - name: build-container-image
-    taskRef:
-      name: build-task
     runAfter: ["package"]
-    params:
-      - name: TLS_VERIFY
-        value: "false"
-      - name: dockerfilePath
-        value: "src/main/docker"
-      - name: image-name
-        value: $(params.image-name)
-    workspaces:
-    - name: maven-repo
-      workspace: maven-repo
-
-  finally:
-  - name: clean-workspace
     taskRef:
-      name: cleanup-workspace
+      name: buildah
+      kind: ClusterTask
     workspaces:
-    - name: maven-repo
+    - name: dockerconfig
+      workspace: quay-credentials
+    - name: source
       workspace: maven-repo
+    params:
+    - name: IMAGE
+      value: $(params.image-name)
+    - name: DOCKERFILE
+      value: $(params.dockerfilePath)
